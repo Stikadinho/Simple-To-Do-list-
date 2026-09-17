@@ -1,0 +1,56 @@
+import os
+import sys
+base_dir = os.path.dirname(sys.argv[0])
+file_path = os.path.join(base_dir, "tasks.txt")
+try:
+    with open(file_path, "r", encoding="utf-8") as f:
+        tasks = f.read().splitlines()
+except FileNotFoundError:
+    tasks = []
+while True:
+    print("1-добавить задачу, 2-показать весь список, 3-удалить, 4-редактировать задачу, 5-пометить выполнение задачи, 6-выйти")
+    a=input()
+    if a=="1":
+        z=input("Введи задачу:")
+        if z.strip()=="":
+            print("Пустая задача, повторите ввод")
+        else:
+            tasks.append("[ ] " + z)
+    elif a=="2":
+        print("-" * 30)
+        for i, item in enumerate(tasks, start=1):
+            print(f"{i:>2}. {item}")
+        print("-" * 30)
+    elif a=="3":
+        print("1-удалить последную задачу, 2-удалить все задачи, 3-удалить конкретную задачу")
+        b=input()
+        if b=="1":
+            last=tasks.pop()
+        elif b=="2":
+            tasks.clear()
+        elif b=="3":
+            num=int(input("Номер задачи:"))
+            if num<1 or num>len(tasks):
+                print("нет такого номера, повторите ввод")
+            else:
+                index=num-1
+                tasks.pop(index)
+    elif a=="4":
+        num=int(input("Номер задачи:"))
+        if num<1 or num>len(tasks):
+            print("нет такого номера, повторите ввод")
+        else:
+            index=num-1
+            z1=input("Введи новвую задачу")
+            tasks[index] = "[ ] " + z1
+    elif a=="5":
+         num=int(input("Номер задачи:"))
+         index=num-1
+         tasks[index] = "[✔] " + tasks[index][3:]
+    elif a=="6":
+        with open(file_path, "w", encoding="utf-8") as f:
+            for task in tasks:
+                f.write(task + "\n")
+        print("Файл сохранён сюда:", file_path)
+        print ("удачи)")
+        break
